@@ -74,8 +74,8 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o pull request para
 Proyecto privado para uso interno de CAPRESOCA EPS.
 
 ## 📬 Contacto
-**Responsable:** Osmar Rincón  
-**Correo:** osmarrincon@uniminuto.edu
+**Responsable:** Osmar Yesid Rincón 🦊
+**Correo:** rincon3259@gmail.com
 
 ---
 
