@@ -1,0 +1,26 @@
+# ---- Virtual env ----
+venv/
+.venv/
+
+# ---- Byte-compiled / caches ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+
+# ---- VSCode ----
+.vscode/
+
+# ---- Snapshots ----
+*.log
+*.sqlite3
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+
+# ---- Secrets / configuración local ----
+.env
+.secret*
