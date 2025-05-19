@@ -71,7 +71,8 @@ CAPRESOCA-DATA-AUTOMATION/
 Las contribuciones son bienvenidas. Por favor, abre un issue o pull request para sugerencias, mejoras o corrección de errores.
 
 ## 📄 Licencia
-Proyecto privado para uso interno de CAPRESOCA EPS.
+Este proyecto está bajo la Licencia MIT.  
+Consulta el archivo [LICENSE](LICENSE) para ver todos los términos.
 
 ## 📬 Contacto
 **Responsable:** Osmar Yesid Rincón 🦊
