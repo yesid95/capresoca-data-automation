@@ -1,0 +1,7 @@
+README.md
+setup.py
+src/capresoca_data_automation.egg-info/PKG-INFO
+src/capresoca_data_automation.egg-info/SOURCES.txt
+src/capresoca_data_automation.egg-info/dependency_links.txt
+src/capresoca_data_automation.egg-info/requires.txt
+src/capresoca_data_automation.egg-info/top_level.txt

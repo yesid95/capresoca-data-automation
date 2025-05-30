@@ -41,7 +41,7 @@ CAPRESOCA-DATA-AUTOMATION/
 
 1. Clona el repositorio y accede a la carpeta del proyecto:
    ```powershell
-   git clone <URL_DEL_REPOSITORIO>
+   git clone <https://github.com/yesid95/capresoca-data-automation.git>
    cd capresoca-data-automation
    ```
 2. Crea y activa un entorno virtual (recomendado):
