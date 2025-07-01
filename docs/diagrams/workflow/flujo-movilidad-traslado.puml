@@ -1,0 +1,36 @@
+@startuml
+title Proceso de Validación de Pagos - S1 / R1 / Traslados
+
+start
+
+:Unir Maestro ADRES (subs + cont);
+:Unir con Maestro SIE;
+
+if (¿Tiene múltiples aportantes?) then (Sí)
+  :Verificar fecha de inicio;
+  :Verificar retiros;
+  if (¿Todos se retiraron el mismo mes?) then (Sí)
+    :Construir S1 para bajar a Subsidiado;
+  else (No)
+    :Verificar si debe subir días a Contributivo;
+    :Construir R1 para subir y posterior S1;
+  endif
+else (No)
+  :Validar único aportante;
+  :Aplicar misma lógica (retiro, fechas);
+endif
+
+:Validar último periodo compensado;
+:Consultar pagos en PILA 3047 (ADRES);
+:Verificar PILA original (SIE);
+
+:Determinar fecha de envío;
+if (¿Aplica traslado o reactivación?) then (Sí)
+  :Etiquetar como TRASLADO o REACTIVACIÓN;
+endif
+
+:Construir archivo S1 o R1;
+:Asignar fecha de envío;
+
+stop
+@enduml
