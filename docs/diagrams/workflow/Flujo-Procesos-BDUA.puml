@@ -1,0 +1,102 @@
+@startuml
+!theme plain
+skinparam activity {
+  BorderColor #2E86C1
+  BackgroundColor #D6EAF8
+  ArrowColor #154360
+}
+skinparam ArrowFontName Arial
+skinparam NoteBackgroundColor #F9E79F
+
+title Diagrama de Flujo: Gestión de proceso de reportes BDUA
+
+start
+
+:Paso 1: Recibir Solicitud de Trámite;
+
+:Paso 2: Validación del Solicitante y Permisos;
+
+:Paso 3: Validación de Anexos;
+note right
+Se valida que los soportes para el proceso solicitado estén completos,
+según el listado de requisitos para cada trámite:
+- Movilidad entre regímenes
+- Afiliación (ingreso nuevo o nacimiento)
+- Reporte de Novedad
+- Traslado de EPS
+
+Se diligencia la planilla de control.
+end note
+
+:Paso 4: Verificar Información Actual del Afiliado;
+note right
+Se consulta en los sistemas (ADRES, EPS) si el trámite es procedente
+para cada tipo de solicitud, validando el estado actual del afiliado
+y de su grupo familiar.
+end note
+
+if (Paso 5: ¿La solicitud y los soportes son correctos y procedentes?) then (No)
+  :Paso 6: Explicar al solicitante el motivo de la negación;
+  note left: Se informa por qué el trámite no puede continuar.
+  stop
+else (Sí)
+  :Paso 7: Cargar la solicitud al sistema de información;
+  note right
+  Si la solicitud es procedente y los soportes son validos se realiza
+  el cargue al sistema de infromacion de Capresoca EPS según el tramite
+  a gestionar "Afiliación, novedad, Movilidad o traslado".
+  end note
+
+  :Paso 8: Confirmar y actualizar datos;
+
+  :Paso 9: Generar reporte del sitema de informacion de la EPS;
+    note right
+    Si la solicitud es procedente y los soportes son validos se realiza
+    el cargue al sistema de infromacion de Capresoca EPS según el tramite
+    a gestionar "Afiliación, novedad, Movilidad o traslado".
+  end note
+
+  :Paso 10: Validación de la veracidad de los registros a reportar;
+  note right
+    •	**Afiliaciones "MS-MC"**: Se realiza 2 consulta XML, una con tipo y numero 
+        de documento y otra por nombre. Con el usaurio y contraseña de
+        la EPS en ADRES de los usaurios a reportar, validando que no
+        existan en BDUA, tanto con otro tipo y numero de documento como
+        con el tipo y numero de documento actual.
+    •	**Novedades "NS-NC**: Se valida que las novedades a reportar sean procedente
+        con relacion a la informacion en BDUA, proceso que se realiza para
+        cada registro de los NS y NC, ejemplo; N01 "Actualización o corrección
+        del tipo y número de identificación del afiliado y/o fecha de 
+        nacimiento."  segun resolucion 762 del 2013 tabla "Tabla 13. Códigos
+        de novedades" en el sistema de infromacion de la EPS  se radico una
+        evoluciond e documento de TI a CC pero al realizar la validacion en el
+        Maestro ADRES se encuentra que a la fecha del reporte el afilaido ya existe
+        en ADRES con CC, esto puede pasar porque el dia que el afilido realizo la
+        gestion en ventanilla existia en ADRES con TI pero el ministerio de salud
+        realizo la actualizacion con tablas de referencias de registraduria Civil
+        de Colombia lo que genera que la novedad ya no deba ser gestionada por la
+        EPS porque la actualizacion ya se encuentra en BDUA. Dicho proceso se
+        debe hacer con cada novedad segun Tabla 13. Códigos de novedade de la
+        resolucion 762 del 2023 teniendo en cuenta el matiz o definicion de
+        cada novedad. 
+    •	**Movilidad S1-R1**: Que los afiliados a reportar en movilidad asendente esten
+        es subsidiado, afiliados en Capresoca EPS o retirados del contributivo Capresoca EPS.
+        Los afilaidos a reportar en movilidad desendente esten activos en contributivo con
+        novedad de retiro en todas sus relaciones laborales, que sea beneficairio contributivo
+        y que pase como cabeza de familia Subsidiado o que esten retirados de Capresoca EPS y
+        cuentes con condiciones para pertenecer al regimen subsidiado.
+    •	**Traslado entrada S1-R1**: Se realiza una consulta XML por tipo y numero de 
+        documento, con el usaurio y contraseña de la EPS en ADRES de los usaurios,
+        validando que se esta realizando la solicitud de traslado a usuarios registrados
+        en ADRES, en regimen subsidiado o Retirados del regimen contributivo o que no esten
+        activos en regimen especial, no tengan el documento cancelado o que no esten
+        reportados como pensionados.
+    •	**Traslado de Salida S4-R4**:  Los archivos S2 y R2 que ADRES dispone en el sitio
+        FTP deben ser reestruturados en S4 y R4 dando respuesta a cada registro con una
+        aprovacion o negación segun las causales de la resolución 762 del 2023 para los
+        procesos de tarslado
+  end note
+  stop
+endif
+
+@enduml
