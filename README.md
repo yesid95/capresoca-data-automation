@@ -1,83 +1,92 @@
 # Capresoca Data Automation
 
-Automatización de procesos ETL, validación y análisis de la Base de Datos Única de Afiliados (BDUA) para CAPRESOCA EPS. Este proyecto está implementado en Python y utiliza Jupyter Notebooks para la exploración, transformación y análisis de datos, así como para la generación de reportes y validaciones automatizadas.
+## 1. Descripción General
+
+Este repositorio está destinado a la construcción de una aplicación para el **área de Aseguramiento de Capresoca EPS**. Su finalidad es automatizar tareas críticas del negocio, algunas de forma periódica y programada, y otras bajo demanda del usuario. El objetivo final es consolidar los prototipos actuales en una aplicación de escritorio robusta y ejecutable.
+
+El público objetivo de este proyecto incluye ingenieros de datos, auditores y futuros colaboradores técnicos que necesiten comprender, utilizar o extender las funcionalidades existentes.
 
 ---
 
-## 🚀 Objetivos
-- Automatizar la extracción, transformación y carga (ETL) de datos BDUA.
-- Validar y analizar la calidad de los datos provenientes de diferentes fuentes (SIE, ADRES, PILA, etc.).
-- Generar reportes y estadísticas para la toma de decisiones.
-- Facilitar la integración y trazabilidad de los datos de afiliados.
-- Documentar y centralizar los procesos de análisis y aseguramiento de la información.
+## 2. Estado del Proyecto
 
-## 📦 Características principales
-- Procesamiento y consolidación de archivos masivos (TXT, CSV, Excel).
-- Validaciones cruzadas entre fuentes (SIE, ADRES, PILA, históricos, etc.).
-- Automatización de reportes y generación de indicadores clave.
-- Herramientas para la gestión documental (PDF, correos, unificación de archivos).
-- Notebooks modulares para tareas específicas de aseguramiento y cartera.
+El proyecto se encuentra en una **fase de desarrollo activo**. Los componentes actuales están siendo migrados de notebooks exploratorios a módulos de código reutilizables.
 
-## 📂 Estructura del proyecto
+- **Módulos Principales (`/src`)**:
+  - `file_loader.py`: **(Estable)** Componente para la carga estandarizada de diversos tipos de archivos (CSV, TXT, Excel).
+  - `data_cleaning.py`: **(Estable)** Funciones para la limpieza, validación y transformación de datos según las reglas de negocio.
+  - `main.py`: **(Experimental)** Punto de entrada para futuras ejecuciones automatizadas.
 
-```txt
-CAPRESOCA-DATA-AUTOMATION/
-│
-├── data/             ← Datos brutos y procesados
-├── docs/             ← Documentación adicional
-├── logs/             ← Archivos de log
-├── notebooks/        ← Jupyter notebooks de exploración y automatización
-│   ├── Aseguramiento/   ← Procesos de validación, indicadores y reportes
-│   └── Generales/       ← Utilidades generales y herramientas de apoyo
-├── src/              ← (Reservado para scripts Python reutilizables)
-├── tests/            ← (Reservado para pruebas unitarias/integración)
-├── venv/             ← Entorno virtual (no versionado)
-├── .gitignore
-├── requirements.txt  ← Dependencias del proyecto
-└── README.md         ← Documentación principal
+- **Notebooks (`/notebooks`)**:
+  - **(Prototipos funcionales)** Sirven como borradores y campo de pruebas para desarrollar y validar la lógica de negocio. Se dividen en:
+    - `Aseguramiento`: Flujos de trabajo complejos (cruces, indicadores, reportes).
+    - `Generales`: Utilidades para tareas auxiliares (manejo de PDFs, correos).
+
+---
+
+## 3. Requisitos del Entorno
+
+- **Python**: `3.8` o superior.
+- **Librerías Clave**: `pandas`, `numpy`, `openpyxl`, `sqlalchemy`.
+- Para una lista completa de dependencias, consulta el archivo `requirements.txt`.
+
+Para configurar el entorno, sigue estos pasos:
+
+```powershell
+# 1. Clona el repositorio
+git clone https://github.com/yesid95/capresoca-data-automation.git
+cd capresoca-data-automation
+
+# 2. Crea y activa un entorno virtual
+python -m venv venv
+.\venv\Scripts\Activate
+
+# 3. Instala las dependencias
+pip install -r requirements.txt
 ```
 
-## 🛠️ Instalación
+---
 
-1. Clona el repositorio y accede a la carpeta del proyecto:
-   ```powershell
-   git clone <https://github.com/yesid95/capresoca-data-automation.git>
-   cd capresoca-data-automation
-   ```
-2. Crea y activa un entorno virtual (recomendado):
-   ```powershell
-   python -m venv venv
-   .\venv\Scripts\Activate
-   ```
-3. Instala las dependencias:
-   ```powershell
-   pip install -r requirements.txt
-   ```
+## 4. Guía de Uso Básico
 
-## 📊 Uso básico
+Actualmente, la funcionalidad del proyecto se ejecuta a través de los Jupyter Notebooks. Estos actúan como un **entorno de desarrollo controlado** que permite construir, validar y refinar la lógica de negocio antes de su integración final. Permiten entender los resultados a largo plazo y ajustar los procesos de forma iterativa.
 
-- Abre los notebooks en la carpeta `notebooks/` con Jupyter o VS Code.
-- Ejecuta los notebooks según el proceso requerido (validación, indicadores, unificación, etc.).
-- Personaliza las rutas de entrada/salida según tu entorno local.
+- **Ejemplos de procesos complejos**: Reportes para ADRES según la normativa vigente (Resolución 762 de 2023).
+- **Ejemplos de manejo de históricos**: El notebook `Unificar_Archivos.ipynb` consolida grandes volúmenes de datos en datasets únicos, facilitando análisis futuros o la alimentación de dashboards.
 
-## 📒 Organización de notebooks
-- **Aseguramiento/**: Validaciones, indicadores, reportes y procesos de aseguramiento de la información (ej: `Validar SIE.ipynb`, `Indicadores_Traslados_ADRES.ipynb`, `Unificar_Archivos.ipynb`).
-- **Generales/**: Utilidades para manejo de PDFs, correos, estructura de carpetas, etc.
+1.  **Inicia Jupyter Lab o VS Code** en el directorio raíz del proyecto.
+2.  **Navega a la carpeta `/notebooks`** y abre el notebook correspondiente a la tarea que deseas realizar.
+3.  **Ejemplo**: Para ejecutar el proceso de validación de archivos del Sistema de Información de Entidades (SIE), abre y ejecuta las celdas de `notebooks/Aseguramiento/Validar SIE.ipynb`.
 
-## 🧩 Dependencias principales
-- pandas, numpy, requests, SQLAlchemy, openpyxl, xlsxwriter, entre otras (ver `requirements.txt`).
-
-## 🤝 Contribución
-Las contribuciones son bienvenidas. Por favor, abre un issue o pull request para sugerencias, mejoras o corrección de errores.
-
-## 📄 Licencia
-Este proyecto está bajo la Licencia MIT.  
-Consulta el archivo [LICENSE](LICENSE) para ver todos los términos.
-
-## 📬 Contacto
-**Responsable:** Osmar Yesid Rincón 🦊
-**Correo:** rincon3259@gmail.com
+**Nota**: Asegúrate de configurar las rutas de entrada y salida de archivos dentro de cada notebook según tu entorno local.
 
 ---
 
-> Última actualización: mayo 2025
+## 5. Futuras Funcionalidades
+
+La visión a largo plazo es consolidar la lógica de negocio en una aplicación de escritorio para Windows que permita:
+
+- **Tareas Programadas**: Ejecutar procesos de validación y reportería de forma automática (diaria, semanal, mensual).
+- **Automatización por Demanda**: Permitir a los usuarios iniciar flujos de trabajo específicos a través de una interfaz gráfica sencilla.
+- **Expansión de Módulos**: Fortalecer la biblioteca `src` con más componentes reutilizables y pruebas unitarias.
+
+---
+
+## 6. Contribuciones
+
+Las contribuciones son bienvenidas. Para proponer mejoras, sigue estos lineamientos:
+
+- **Estructura Modular**: Si desarrollas una nueva funcionalidad reutilizable, añádela como una función o clase en un módulo dentro de `/src`.
+- **Estilo de Código**: Sigue las convenciones de `PEP 8` para mantener la consistencia y legibilidad del código.
+- **Flujo de Trabajo**: Abre un *issue* para discutir el cambio propuesto y luego envía un *pull request* para su revisión.
+
+---
+
+## 7. Contacto y Licencia
+
+- **Responsable**: Osmar Yesid Rincón
+- **Correo**: rincon3259@gmail.com
+
+Este proyecto está bajo la **Licencia MIT**. Consulta el archivo `LICENSE` para más detalles.
+
+> *Última actualización: 19 de julio de 2025*
