@@ -44,52 +44,18 @@ La arquitectura objetivo es una aplicación de escritorio para Windows con una c
 -   **Capa de Acceso a Datos**:
     -   Componentes responsables de interactuar con las fuentes de datos: leer archivos (locales, red), conectarse a bases de datos si es necesario, y escribir los resultados.
 
-### Diagrama Conceptual de la Arquitectura Objetivo
+---
+## 3. Referencia cruzada 
+Estas referencias facilita la navegación entre la visión técnica y el contexto funcional del sistema.
 
-```plantuml
-@startuml
-!theme plain
-skinparam rectangle {
-    BorderColor #4A4A4A
-    BackgroundColor #F0F0F0
-}
-skinparam component {
-    BorderColor #007ACC
-    BackgroundColor #D8EAFB
-}
-skinparam actor {
-    BorderColor #3B8C3B
-}
+### 3.1. Automatización del Reporte de Movilidad S1
 
-actor "Usuario / Auditor" as user
+Para detalles operativos, normativos y de actores/fuentes de datos del proceso de automatización de movilidad S1, consulta la sección correspondiente en [`casos_uso.md`](casos_uso.md#211-caso-de-uso-automatización-del-reporte-de-movilidad-s1).
 
-package "Aplicación de Escritorio" {
-    component "Interfaz de Usuario (GUI)" as gui
-    component "Lógica de Negocio (Core)" as core
-    component "Acceso a Datos" as data_access
-    component "Scheduler (Tareas Prog.)" as scheduler
-}
 
-package "Fuentes de Datos" {
-    cloud "Archivos (TXT, CSV, XLSX)" as files
-    database "Bases de Datos (Opcional)" as db
-}
+---
+# Diagrama de Arquitectura
 
-package "Salidas" {
-    folder "Reportes Generados" as reports
-    folder "Logs del Sistema" as logs
-}
+El diagrama de componentes de la arquitectura objetivo se encuentra en el archivo [`arquitectura.puml`](diagrams/architecture/arquitectura.puml). Puedes visualizarlo con extensiones como PlantUML en VS Code o herramientas compatibles.
 
-user -- gui
-gui -- core
-core -- data_access
-core -- scheduler
-
-data_access --> files
-data_access --> db
-
-core --> reports
-core --> logs
-
-@enduml
-```
+> El archivo `.puml` contiene la definición completa del diagrama, permitiendo mantener la documentación ligera y profesional.

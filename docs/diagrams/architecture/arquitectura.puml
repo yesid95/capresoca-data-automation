@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+skinparam rectangle {
+    BorderColor #4A4A4A
+    BackgroundColor #F0F0F0
+}
+skinparam component {
+    BorderColor #007ACC
+    BackgroundColor #D8EAFB
+}
+skinparam actor {
+    BorderColor #3B8C3B
+}
+
+actor "Usuario / Auditor" as user
+
+package "Aplicación de Escritorio" {
+    component "Interfaz de Usuario (GUI)" as gui
+    component "Lógica de Negocio (Core)" as core
+    component "Acceso a Datos" as data_access
+    component "Scheduler (Tareas Prog.)" as scheduler
+}
+
+package "Fuentes de Datos" {
+    cloud "Archivos (TXT, CSV, XLSX)" as files
+    database "Bases de Datos (Opcional)" as db
+}
+
+package "Salidas" {
+    folder "Reportes Generados" as reports
+    folder "Logs del Sistema" as logs
+}
+
+user -- gui
+gui -- core
+core -- data_access
+core -- scheduler
+
+data_access --> files
+data_access --> db
+
+core --> reports
+core --> logs
+
+@enduml

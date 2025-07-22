@@ -53,11 +53,11 @@ A continuación se detallan las tareas específicas, agrupadas por área funcion
 
 - [ ] **Prioridad Alta**: Finalizar la refactorización de los notebooks de `Aseguramiento` más críticos a clases y funciones en `src`. <!-- tag:critical -->
 - [ ] **Automatización Validación de Movilidad S1 (descendente a subsidiado)** <!-- tag:critical -->
-    - [ ] Fase 1: Fundamento del diagrama
+    - [x] Fase 1: Fundamento del diagrama
         - [x] Definir objetivo del flujo
-        - [ ] Identificar actores involucrados (EPS, base de datos de relaciones laborales, usuario que ejecuta la revisión, etc.)
-        - [ ] Establecer el inicio y fin del proceso
-        - [ ] Redactar estos puntos en texto para validar que estamos alineados antes de graficar
+        - [x] Identificar actores involucrados (EPS, base de datos de relaciones laborales, usuario que ejecuta la revisión, etc.)
+        - [x] Establecer el inicio y fin del proceso.
+        - [x] Redactar estos puntos en texto para validar que estamos alineados antes de graficar
     - [ ] Fase 2: Mapeo de decisiones principales
         - [ ] Definir nodos tipo (¿Tiene relación laboral activa?, ¿más de una relación abierta?, ¿fecha de retiro?, ¿cotización reciente?)
         - [ ] Asociar cada nodo con una acción automatizable

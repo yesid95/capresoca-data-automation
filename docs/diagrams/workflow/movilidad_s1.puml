@@ -1,0 +1,51 @@
+@startuml
+' =========================================================================
+' Objetivo del flujo:
+' Este diagrama técnico tiene como propósito organizar la lógica del proceso de validación para el reporte de movilidad S1 descendente al régimen subsidiado.
+' Busca identificar las fuentes de datos clave, los pasos del flujo, las decisiones automatizables y sus justificaciones.
+' Servirá como plano base para:
+' - Comprender el punto de inicio, los criterios de validación y su ubicación en el flujo.
+' - Entender por qué se valida cada condición y qué acción se toma según el resultado.
+' - Facilitar el desarrollo, mantenimiento y evolución futura del código Python asociado.
+' =========================================================================
+
+' -------------------------------------------------------------------------
+' Actores involucrados:
+'
+' 👤 Personas:
+' - Profesional de apoyo del área de Aseguramiento de Capresoca EPS:
+'   Encargado del reporte de movilidad descendente S1 según Resolución 762/2023,
+'   y del mantenimiento de la base de datos del régimen subsidiado.
+'
+' 🖥️ Sistemas:
+' - Sistema interno de la EPS (no se nombra para evitar acoplamientos innecesarios).
+'
+' 🗂️ Fuentes de datos utilizadas:
+' - Base S1 (generada por el sistema interno).
+' - PILA EPS (novedades y pagos registrados por la EPS).
+' - PILA 3047 (validada por ADRES, complementaria a la PILA EPS).
+' - Maestros ADRES (usuarios a validar para posibles reportes).
+' - Dataset SAT (inicio y fin de relaciones laborales, movilidad efectiva).
+' - Dataset R1 (inicio de relaciones laborales).
+' - Dataset NC (novedades contributivo).
+' - Dataset ACX y ABX (máximos periodos por afiliado).
+' - Dataset Expediente EPS (compensación de días, continuidad laboral).
+'
+' Nota: Estos actores y fuentes pueden ser modificados en fases posteriores si se detectan nuevas dependencias.
+' -------------------------------------------------------------------------
+' Inicio y Fin del Proceso S1:
+' Inicio: El proceso inicia cuando el profesional de apoyo del área de aseguramiento abre la automatización para preparar el reporte de movilidad S1. La automatización debe ejecutarse el mismo día de reporte, siguiendo el calendario de semanas de proceso definido por ADRES. Cada mes puede tener 2, 3, 4 o 5 semanas hábiles, y el reporte S1 se radica el segundo día hábil de la semana de proceso (usualmente martes o miércoles si el lunes es festivo).
+'
+' Fin: El proceso finaliza cuando el profesional de apoyo obtiene el archivo Excel ".xlsx" con la relación de usuarios categorizados, identificando correctamente a los afiliados que deben o no ser reportados en movilidad S1. Además, se documenta la trazabilidad de las decisiones tomadas por cada afiliado y se genera una hoja de informe/log para validar las bases de datos utilizadas y su fecha de actualización, facilitando la reproducibilidad y la identificación de errores.
+' -------------------------------------------------------------------------
+' -------------------------------------------------------------------------
+
+' Diagrama de Actividad para Validación de Movilidad S1 (descendente a subsidiado)
+
+start
+
+' Aquí se irán agregando los pasos y decisiones del proceso
+
+
+stop
+@enduml
