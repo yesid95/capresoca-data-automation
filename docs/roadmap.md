@@ -52,24 +52,47 @@ A continuación se detallan las tareas específicas, agrupadas por área funcion
 ### 2.1. Lógica de Negocio (Core / Back-end) ✅ 0/5 tareas completadas
 
 - [ ] **Prioridad Alta**: Finalizar la refactorización de los notebooks de `Aseguramiento` más críticos a clases y funciones en `src`. <!-- tag:critical -->
-- [ ] **Automatización Validación de Movilidad S1 (descendente a subsidiado)** <!-- tag:critical -->
-    - [x] Fase 1: Fundamento del diagrama
-        - [x] Definir objetivo del flujo
-        - [x] Identificar actores involucrados (EPS, base de datos de relaciones laborales, usuario que ejecuta la revisión, etc.)
-        - [x] Establecer el inicio y fin del proceso.
-        - [x] Redactar estos puntos en texto para validar que estamos alineados antes de graficar
-    - [ ] Fase 2: Mapeo de decisiones principales
-        - [ ] Definir nodos tipo (¿Tiene relación laboral activa?, ¿más de una relación abierta?, ¿fecha de retiro?, ¿cotización reciente?)
-        - [ ] Asociar cada nodo con una acción automatizable
-        - [ ] Ordenar estas decisiones en un flujo lógico
-    - [ ] Fase 3: Construcción progresiva del .puml
-        - [ ] Crear plantilla base con @startuml y los actores
-        - [ ] Agregar cada bloque de decisión usando sintaxis de PlantUML (if, else, endif, etc.)
-        - [ ] Comentar cada sección en el .puml para facilitar mantenimiento
-    - [ ] Fase 4: Revisión y cierre
-        - [ ] Validar visualmente el flujo
-        - [ ] Confirmar que no hay ambigüedades o condiciones mal cubiertas
-        - [ ] Guardar el .puml en docs/diagramas (o mantenerlo en docs/ si aún hay pocos)
+  
+  - [ ] **Proceso 1: Automatización Validación de Movilidad S1 (descendente a subsidiado)** <!-- tag:critical -->
+      - [x] Fase 1: Fundamento del diagrama
+          - [x] Definir objetivo del flujo
+          - [x] Identificar actores involucrados (EPS, base de datos de relaciones laborales, usuario que ejecuta la revisión, etc.)
+          - [x] Establecer el inicio y fin del proceso.
+          - [x] Redactar estos puntos en texto para validar que estamos alineados antes de graficar
+      - [ ] Fase 2: Mapeo de decisiones principales
+          - [ ] Definir nodos tipo (¿Tiene relación laboral activa?, ¿más de una relación abierta?, ¿fecha de retiro?, ¿cotización reciente?)
+          - [ ] Asociar cada nodo con una acción automatizable
+          - [ ] Ordenar estas decisiones en un flujo lógico
+      - [ ] Fase 3: Construcción progresiva del .puml
+          - [ ] Crear plantilla base con @startuml y los actores
+          - [ ] Agregar cada bloque de decisión usando sintaxis de PlantUML (if, else, endif, etc.)
+          - [ ] Comentar cada sección en el .puml para facilitar mantenimiento
+      - [ ] Fase 4: Revisión y cierre
+          - [ ] Validar visualmente el flujo
+          - [ ] Confirmar que no hay ambigüedades o condiciones mal cubiertas
+          - [ ] Guardar el .puml en docs/diagramas (o mantenerlo en docs/ si aún hay pocos)
+  
+  - [ ] **Proceso 2: Validador de inconsistencias entre Sistema EPS y Maestro ADRES** <!-- tag:important -->
+    - [ ] Fase 1: Definir tipos de inconsistencias detectables
+    - [ ] Fase 2: Diagramar flujo de validación
+    - [ ] Fase 3: Prototipo notebook con validaciones
+    - [ ] Fase 4: Refactorización como módulo `src/validador`
+    - [ ] Fase 5: Exportar reportes de alertas o correcciones sugeridas
+
+  - [ ] **Proceso 3: Generación automática de archivo NS Subsidiado (Resolución 762 de 2023)** <!-- tag:important -->
+      - [ ] Fase 1: Entendimiento normativo y estructura del archivo NS
+      - [ ] Fase 2: Diseño del flujo de generación automática
+      - [ ] Fase 3: Notebook funcional que genera archivo NS
+      - [ ] Fase 4: Módulo `src/ns_subsidiado` y validaciones
+      - [ ] Fase 5: Preparación para integración en ejecutable
+
+  - [ ] **Proceso 4: Pipeline de ETL de archivos desde FTPs de ADRES a DataWarehouse** <!-- tag:automatizacion -->
+      - [ ] Fase 1: Conexión y descarga automatizada desde FTPs
+      - [ ] Fase 2: Organización en carpetas de servidor y DWH
+      - [ ] Fase 3: Refactorización como módulo `src/etl_adres`
+      - [ ] Fase 4: Verificación de integridad de datos descargados
+      - [ ] Fase 5: Programación de ejecución automática
+
 - [ ] **Prioridad Media**: Integrar un sistema de logging centralizado para registrar eventos y errores en toda la aplicación. <!-- tag:critical -->
 - [ ] **Prioridad Baja**: Investigar y añadir soporte para nuevas fuentes de datos si es necesario.
 

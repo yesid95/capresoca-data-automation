@@ -12,7 +12,7 @@ skinparam actor {
     BorderColor #3B8C3B
 }
 
-actor "Usuario / Auditor" as user
+actor "Yesid / Auditor" as user
 
 package "Aplicación de Escritorio" {
     component "Interfaz de Usuario (GUI)" as gui
