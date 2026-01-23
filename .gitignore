@@ -24,3 +24,4 @@ Thumbs.db
 # ---- Secrets / configuración local ----
 .env
 .secret*
+config_local.py
