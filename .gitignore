@@ -25,3 +25,5 @@ Thumbs.db
 .env
 .secret*
 config_local.py
+# ---- Data folder (keep empty in remote) ----
+data/
