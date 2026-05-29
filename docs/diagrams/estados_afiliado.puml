@@ -1,0 +1,107 @@
+@startuml estados_afiliado
+title Diagrama de Estados: Ciclo de Vida y Clasificación del Afiliado
+skinparam DefaultFontName "Arial"
+skinparam DefaultFontSize 12
+
+' Estilos generales para bordes y texto
+skinparam state {
+  BorderColor #4A5568
+  FontColor #2D3748
+}
+
+legend right
+  |= Color |= Significado / Destino |= Acción Requerida |
+  |<#E8F0FE>| Afiliado en proceso / evaluación | Ninguna (Automático) |
+  |<#E6F4EA>| Afiliado sin novedades (Red OK) | Ninguna (Se mantiene red actual) |
+  |<#FEF7E0>| Inconsistencia (Requiere corrección) | Genera novedad en archivo .txt para cargue correctivo |
+  |<#FCE8E6>| Excluido o Anomalía de red | Exclusión del cargue automático (Auditoría/Casos Especiales) |
+end legend
+
+[*] --> Cargando : Registro del afiliado entra al sistema
+
+state "Cargando Afiliado" as Cargando #E8F0FE
+Cargando --> EvaluandoExclusiones : Iniciar validaciones
+
+state "Evaluando Exclusiones" as EvaluandoExclusiones #E8F0FE
+note right of EvaluandoExclusiones
+  Se verifica si el afiliado:
+  - Está fallecido o suspendido
+  - No está activo en ADRES
+  - No está certificado en LMA/Compensados
+end note
+
+EvaluandoExclusiones --> Excluido : Cumple criterio de exclusión
+EvaluandoExclusiones --> AptoParaValidacion : Pasa filtros iniciales (Apto)
+
+state "Afiliado Excluido" as Excluido #FCE8E6
+Excluido --> Auditoria : Registrar en Hoja de Auditoría
+
+state "Apto Para Asignación" as AptoParaValidacion #E8F0FE {
+  [*] --> EvaluandoPoblacion
+  
+  state "Evaluando Población" as EvaluandoPoblacion #E8F0FE
+  EvaluandoPoblacion --> CañoMochuelo : Es Población Especial Indígena
+  EvaluandoPoblacion --> PoblacionGeneral : Es Población General
+
+  ' Rama Población Especial Caño Mochuelo
+  state "Población Caño Mochuelo" as CañoMochuelo #E8F0FE {
+    [*] --> ChequearUbicacion
+    
+    state "Validando Ubicación" as ChequearUbicacion #E8F0FE
+    ChequearUbicacion --> ValidandoIPSEspecial : Ubicado en Hato Corozal o Paz de Ariporo
+    ChequearUbicacion --> ChequearPortabilidad : Ubicado en otro municipio
+    
+    state "Validando Portabilidad" as ChequearPortabilidad #E8F0FE
+    ChequearPortabilidad --> ValidandoRedReceptora : Portabilidad Regional activa (PR)
+    ChequearPortabilidad --> AnomaliaIndigena : Sin portabilidad activa
+  }
+
+  ' Rama Población General
+  state "Población General" as PoblacionGeneral #E8F0FE {
+    [*] --> BuscarContratoGeneral
+    
+    state "Buscando Contrato" as BuscarContratoGeneral #E8F0FE
+    BuscarContratoGeneral --> ValidandoRedGeneral : Existe contrato en el municipio
+    BuscarContratoGeneral --> SinContratoGeneral : Sin contrato en el municipio
+  }
+}
+
+' Validaciones de Red y transición a destinos finales
+state "Validando IPS Especial" as ValidandoIPSEspecial #E8F0FE
+ValidandoIPSEspecial --> Red_OK : IPS asignada es IPSI (900827186)
+ValidandoIPSEspecial --> Red_Inconsistente : \n \n No es IPSI o está Vacío
+
+state "Validando Red Receptora" as ValidandoRedReceptora #E8F0FE
+ValidandoRedReceptora --> Red_OK : IPS coincide con red del municipio receptor
+ValidandoRedReceptora --> Red_Inconsistente : No coincide con Red Receptora o Vacío
+
+state "Validando Red General" as ValidandoRedGeneral #E8F0FE
+ValidandoRedGeneral --> Red_OK : IPS coincide con contrato del municipio
+ValidandoRedGeneral --> Red_Inconsistente : No coincide con Contrato o está Vacío
+
+state "Anomalía Indígena" as AnomaliaIndigena #FCE8E6
+AnomaliaIndigena --> CasosEspecialesIndigenas : Registrar en Hoja de Casos Especiales
+
+state "Sin Contrato General" as SinContratoGeneral #FCE8E6
+SinContratoGeneral --> Red_SinContrato : Registrar en Red Consolidada (Sin Contrato)
+
+state "Red Correcta (OK)" as Red_OK #E6F4EA
+Red_OK --> SinNovedad : Registrar en Hoja Red Consolidada (Sin Novedad)
+
+state "Red Incorrecta / Vacía" as Red_Inconsistente #FEF7E0
+Red_Inconsistente --> DetalleInconsistencias : Registrar en Hoja Detalle Inconsistencias
+
+' Estados finales (Hojas de entregables)
+state "Hoja: Auditoría" as Auditoria #FCE8E6
+state "Hoja: Casos Especiales" as CasosEspecialesIndigenas #FCE8E6
+state "Hoja: Red Consolidada\n(Estado: Sin Novedad)" as SinNovedad #E6F4EA
+state "Hoja: Red Consolidada\n(Estado: Sin Contrato)" as Red_SinContrato #FCE8E6
+state "Hoja: Detalle Inconsistencias\n(Genera cargue .txt)" as DetalleInconsistencias #FEF7E0
+
+Auditoria --> [*]
+SinNovedad --> [*]
+DetalleInconsistencias --> [*]
+CasosEspecialesIndigenas --> [*]
+Red_SinContrato --> [*]
+
+@enduml

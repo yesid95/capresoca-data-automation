@@ -1,0 +1,172 @@
+@startuml flujo_asignacion
+title Diagrama de Flujo: Asignación y Validación de Red de Servicios (SIE vs Contratada)
+skinparam DefaultFontName "Arial"
+skinparam DefaultFontSize 12
+skinparam ActivityBackgroundColor #F2F4F7
+skinparam ActivityBorderColor #1F4E78
+skinparam ActivityFontColor #333333
+skinparam DecisionBackgroundColor #D9E1F2
+skinparam DecisionBorderColor #1F4E78
+skinparam DecisionFontColor #1F4E78
+skinparam NoteBackgroundColor #FFF2CC
+skinparam NoteBorderColor #D99694
+
+start
+:Cargar fuentes de información clave;
+note right
+  **Fuentes Consolidadas:**
+  1. Red actualmente asignada en SIE
+  2. Maestro SIE (Información local)
+  3. Portabilidad (Regional y Nacional)
+  4. Maestro ADRES (Contributivo y Subsidiado)
+  5. LMA y Compensados (Población certificada)
+  6. Alto Costo
+  7. Población Especial "Caño Mochuelo" (Indígenas)
+end note
+
+partition "Pre-procesamiento e Integración (Unificación del Afiliado)" {
+  :Cruzamiento de bases de datos por identificador único (Serial BDUA);
+  note right
+    Permite rastrear al afiliado entre los
+    sistemas locales (SIE) y nacionales (ADRES)
+  end note
+
+  :Homologación por Evolución de Documento (Linajes);
+  note right
+    **Negocio:** Debido a la diferencia en fechas de actualización,
+    un afiliado puede figurar con RC o TI en una base y con CC en otra.
+    Se unifican todos sus registros históricos bajo su documento vigente
+    más reciente (ej. CC reemplaza a TI) en una sola fila consolidada.
+  end note
+
+  :Estandarizar Características del Afiliado;
+  note right
+    Se unifica la información en una sola fila por usuario con:
+    - Ubicación (Municipios ADRES vs. SIE)
+    - Pertenencia a poblaciones especiales (Alto Costo, Caño Mochuelo)
+    - Criterios de certificación (Compensados y LMA)
+  end note
+}
+
+partition "Filtros de Exclusión y Criterios de Población Certificada" {
+  if (¿El afiliado está activo y certificado?\n- Debe estar Activo en ADRES ('AC')\n- Debe figurar en LMA o Compensados) then (No / Población no certificada)
+    :Excluir del proceso y mover a Auditoría;
+    note right
+      **Regla:** Solo se asigna red a afiliados activos
+      y certificados bajo LMA o Compensados (base de pago).
+    end note
+    stop
+  else (Sí / Afiliado activo y certificado)
+  endif
+
+  if (¿Afiliado en estado de exclusión?\n(Fallecido o Suspendido en ADRES o SIE)) then (Sí)
+    :Excluir del proceso y mover a Auditoría;
+    stop
+  else (No)
+  endif
+}
+
+partition "Determinación del Municipio de Asignación" {
+  if (¿Tiene Portabilidad Nacional activa?) then (Sí)
+    :Excluir y mover a Auditoría:\n"Portabilidad Nacional";
+    note right
+      **Motivo:** Capresoca es una EPS regional con cobertura
+      exclusiva en Casanare. Si el afiliado está en portabilidad
+      nacional (fuera del departamento), queda sin red local en este proceso.
+    end note
+    stop
+  else (No)
+    if (¿Tiene Portabilidad Regional activa en Casanare?) then (Sí)
+      :Usar Municipio Receptor (portabilidad);
+    else (No)
+      :Usar Municipio registrado en el SIE;
+    endif
+  endif
+
+  if (¿El municipio final pertenece a Casanare?\n(Código de municipio inicia por '85')) then (No)
+    :Excluir y mover a Auditoría:\n"Departamento diferente a Casanare";
+    stop
+  else (Sí / Municipio válido de Casanare)
+  endif
+}
+
+partition "Validación de Novedades de Registro" {
+  if (¿Activo en ADRES pero Retirado en el SIE?) then (Sí)
+    :Registrar Novedad:\n"Activo ADRES - Retirado SIE";
+    note right
+      **Acción:** Se genera alerta para corregir base de datos
+      pero **se mantiene** al usuario en el proceso
+      para asignarle su red de servicios contratada.
+    end note
+  else (No)
+  endif
+}
+
+partition "Asignación y Validación de Red Contratada" {
+  repeat :Para cada servicio contratado requerido;
+    note right
+      Servicios a evaluar:
+      - Medicina General, Laboratorio Clínico,
+      - Odontología General, Medicamentos,
+      - Optometría, Oftalmología
+      - Imágenes Diagnósticas (Ionizantes)
+    end note
+
+    if (¿Afiliado es de Población Especial "Caño Mochuelo"?) then (Sí)
+      if (¿Municipio es Hato Corozal (85125) o Paz de Ariporo (85250)?) then (Sí)
+        if (¿El servicio es Básico?\n(Medicina, Laboratorio, Odonto o Medicamentos)) then (Sí)
+          :Filtrar contratos para usar estrictamente la IPSI:\n**IPSI Caño Mochuelo** (NIT 900827186);
+        else (No / Servicios transversales como Optometría)
+          :Usar contratos generales del Municipio;
+        endif
+      else (No / Fuera de Hato Corozal o Paz de Ariporo)
+        if (¿Tiene Portabilidad Regional "PR" activa en el municipio receptor?) then (Sí)
+          :Usar contratos generales del Municipio Receptor;
+        else (No)
+          :Registrar en "Casos Especiales Indígenas":\n**ANOMALÍA INDÍGENA**\n(Fuera de origen sin portabilidad);
+          detach
+        endif
+      endif
+    else (No / Afiliado General)
+      :Usar contratos generales del Municipio;
+    endif
+
+    :Comparar IPS asignada en SIE vs IPS Contratada/Esperada;
+    if (¿IPS en SIE coincide con contrato válido?) then (Sí)
+      :Marcar Servicio como **OK**;
+    else (No)
+      if (¿Está vacío/nulo en SIE?) then (Sí)
+        :Marcar Servicio como **VACÍO**\n(Sugerir primer contrato de red);
+      else (No / Asignada IPS incorrecta)
+        if (¿No hay contratos en el municipio?) then (Sí)
+          :Marcar Servicio como **SIN_CONTRATO**;
+        else (No)
+          :Marcar Servicio como **INCORRECTO**\n(Sugerir primer contrato de red);
+        endif
+      endif
+      :Registrar novedad en "Detalle Inconsistencias";
+    endif
+  backward:Evaluar siguiente servicio;
+  repeat while (¿Quedan servicios por evaluar?) is (Sí) not (No)
+}
+
+partition "Generación de Entregables" {
+  :Generar archivos correctivos .txt ANSI separados por "|" para cargue a SIE;
+  note right
+    - Estructura: Municipio -> [Subcarpeta Prestador si hay >1] -> municipio_servicio.txt
+    - Contenido: TIPO_DOCUMENTO | NUMERO_DOCUMENTO | CODIGO_SERVICIO | IPS_CONTRATADA_NIT
+  end note
+
+  :Generar Reporte Excel Consolidado con formato openpyxl;
+  note right
+    Pestañas:
+    1. Red_Consolidada (afiliados validados)
+    2. Detalle_Inconsistencias (vacíos/incorrectos)
+    3. Casos_Especiales_Indigenas (anomalías indígenas)
+    4. Auditoria (exclusiones de cargue)
+    5. Dashboard_Resumen (métricas clave)
+  end note
+}
+
+stop
+@enduml

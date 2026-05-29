@@ -28,6 +28,7 @@ A continuación, se detallan los principales casos de uso y los notebooks que si
     -   `notebooks/Aseguramiento/Validar SIE.ipynb`: Prototipo para el proceso de validación de la estructura y contenido de los archivos del Sistema de Información de Entidades (SIE).
     -   `notebooks/Aseguramiento/Cruces Informacion.ipynb`: Base para el motor de cruce de datos entre múltiples fuentes.
     -   `notebooks/Aseguramiento/Corregir NS-NEG.ipynb`: Prototipo para la lógica de corrección de inconsistencias específicas detectadas durante los cruces.
+    -   `notebooks/Aseguramiento/PR_AS_05_Asignacion_Notificacion_IPS.ipynb`: Prototipo y validador de red de servicios (contratada vs asignada). Consulta la [Documentación Técnica Detallada](automatizacion_asignacion_red.md).
 
 #### 2.1.1. Caso de Uso: Automatización del Reporte de Movilidad S1
 

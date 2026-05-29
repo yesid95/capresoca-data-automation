@@ -1,0 +1,62 @@
+@startuml insumos_cargue
+title Diagrama de Insumos y Salidas del Proceso de Automatización (SIE vs Contratada)
+skinparam DefaultFontName "Arial"
+skinparam rectangleBackgroundColor #F2F4F7
+skinparam rectangleBorderColor #1F4E78
+skinparam databaseBackgroundColor #D9E1F2
+skinparam databaseBorderColor #1F4E78
+
+actor "Analista de Aseguramiento" as analista
+
+rectangle "Insumos (Bases de Datos y Reportes de Entrada)" as insumos {
+  database "Reporte Red SIE\n(Archivo .csv)" as sie_rep
+  database "Maestro SIE\n(Archivo .csv)" as sie_maestro
+  database "Portabilidad Regional y Nacional\n(Archivos .xlsx)" as port_base
+  database "LMA (Liquidación Mensual)\n(Archivo .xlsx)" as lma_base
+  database "Compensados ADRES\n(Archivo .xlsx)" as comp_base
+  database "Censo Indígena Caño Mochuelo\n(Archivo .xlsx)" as pe_indigenas
+  database "Maestros BDUA ADRES\n(Archivos .txt)" as adres_base
+  database "Maestro Alto Costo\n(Archivo .xlsx)" as ac_base
+  database "Tabla de Contratos\n(Archivo .txt)" as contratos_base
+}
+
+rectangle "Automatización (Notebook Jupyter v2)" as notebook #FFF2CC {
+  component "Módulo de Cargue y Limpieza" as cargue
+  component "Módulo de Cruce y Exclusiones" as exclusiones
+  component "Módulo de Validación de Red\n(Reglas Caño Mochuelo)" as validacion
+  component "Módulo de Exportación" as exportacion
+}
+
+rectangle "Salidas del Proceso" as salidas {
+  file "Excel de Consolidación\n(Red_Asignada_Consolidada_[Fecha].xlsx)" as excel_out
+  folder "Directorio de Cargues SIE\n(Cargues_SIE_[Fecha]/)" as folder_out {
+    file "TXTs por Municipio/Servicio\n(ANSI, separados por '|')" as txt_out
+  }
+}
+
+' Flujo del actor
+analista --> sie_rep : Extrae del SIE
+analista --> sie_maestro : Extrae del SIE
+analista --> contratos_base : Obtiene de Contratación
+
+' Cargas al notebook
+sie_rep --> cargue
+sie_maestro --> cargue
+port_base --> cargue
+lma_base --> cargue
+comp_base --> cargue
+pe_indigenas --> cargue
+adres_base --> cargue
+ac_base --> cargue
+contratos_base --> cargue
+
+' Flujo interno de la automatización
+cargue --> exclusiones
+exclusiones --> validacion : Datos Consolidados y Depurados
+validacion --> exportacion : Base de Datos Validada y Novedades
+
+' Salidas generadas
+exportacion --> excel_out : Pestañas: Red_Consolidada, Detalle_Inconsistencias,\nCasos_Especiales_Indigenas, Auditoria, Dashboard_Resumen
+exportacion --> folder_out : Genera árbol de directorios y archivos .txt
+
+@enduml
