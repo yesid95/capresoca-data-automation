@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Subprocedimiento&colon; Asignaci&oacute;n de Red de Servicios y Notificaci&oacute;n &lpar;Portabilidad&rpar;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <span id="markdown-mermaid" aria-hidden="true" data-config="{&quot;darkModeTheme&quot;:&quot;vscode&quot;,&quot;lightModeTheme&quot;:&quot;vscode&quot;,&quot;maxTextSize&quot;:50000,&quot;clickDrag&quot;:&quot;alt&quot;,&quot;showControls&quot;:&quot;onHoverOrFocus&quot;,&quot;resizable&quot;:true,&quot;maxHeight&quot;:&quot;&quot;}"></span>
+				<h1 id="subprocedimiento-asignación-de-red-de-servicios-y-notificación-portabilidad">Subprocedimiento: Asignación de Red de Servicios y Notificación (Portabilidad)</h1>
+<h2 id="1-contexto-institucional">1. Contexto Institucional</h2>
+<p>Este subprocedimiento forma parte integral del proceso de <strong>Aseguramiento</strong> de <strong>Capresoca EPS</strong>. Se fundamenta en el procedimiento <strong>PR-AS-05 Portabilidad en Salud (V.05)</strong>, el cual busca garantizar la continuidad de la prestación del servicio de salud cuando un afiliado se traslada de su domicilio de afiliación original.</p>
+<h2 id="2-descripción-del-proceso-técnico-data-pipeline">2. Descripción del Proceso Técnico (Data Pipeline)</h2>
+<p>El objetivo es transformar la extracción bruta del sistema institucional en una base de datos depurada, auditada financieramente y geográficamente consistente para la asignación de red primaria.</p>
+<h3 id="fase-1-ingesta-y-normalización-del-sie">Fase 1: Ingesta y Normalización del SIE</h3>
+<ul>
+<li>&quot;<strong>Fuente:</strong> Aplicativo SIE (formato <code>.txt</code>, codificación UTF-8).</li>
+<li><strong>Estructura Inicial:</strong> <code>nit;razon_social;abreviatura;numero_identificacion;municipio;codigo;servicio;</code>.</li>
+<li><strong>Tratamiento:</strong> Debido a que el archivo duplica registros por cada servicio asignado, se debe normalizar la columna <code>servicio</code> para consolidar un <strong>registro único por afiliado</strong>.&quot;</li>
+</ul>
+<h3 id="fase-2-cruce-y-clasificación-de-portabilidad">Fase 2: Cruce y Clasificación de Portabilidad</h3>
+<p>Se integra la información del reporte de portabilidad para identificar el tipo de desplazamiento del usuario:</p>
+<ul>
+<li><strong>Estados a asignar:</strong> 1. Portabilidad Nacional.
+<ol>
+<li>Portabilidad Regional.</li>
+<li>Sin Portabilidad.</li>
+</ol>
+</li>
+<li><strong>Atributos adicionales:</strong> Para la portabilidad regional, se mapean las columnas de departamento y municipio receptor.</li>
+</ul>
+<h3 id="fase-3-validación-financiera-adres---lmacompensados">Fase 3: Validación Financiera (ADRES - LMA/Compensados)</h3>
+<ul>
+<li><strong>Objetivo:</strong> Filtrar la base de datos para reportar únicamente a los afiliados reconocidos económicamente por la ADRES.</li>
+<li><strong>Lógica:</strong> Se identifican los usuarios pagados en el proceso de <strong>Liquidación Mensual de Afiliados (LMA)</strong> y los compensados. Los registros no pagados son marcados para análisis interno.</li>
+</ul>
+<h3 id="fase-4-auditoría-de-consistencia-sie-vs-adres">Fase 4: Auditoría de Consistencia (SIE vs. ADRES)</h3>
+<p>Cruce masivo contra los maestros de ADRES (Contributivo y Subsidiado):</p>
+<ol>
+<li><strong>Validación de Estado:</strong> Identificación de activos, retirados y otras novedades.</li>
+<li><strong>Consistencia Geográfica:</strong> Se comparan los campos de municipio y departamento entre SIE y ADRES.</li>
+<li><strong>Gestión de Inconsistencias:</strong> Los usuarios con diferencias se aislan para corrección por parte de los profesionales de bases de datos, pero la asignación de red se mantiene bajo el <strong>municipio registrado en el SIE</strong>.</li>
+</ol>
+<h2 id="3-salidas-y-entregables-outputs">3. Salidas y Entregables (Outputs)</h2>
+<p>El pipeline generará los siguientes archivos para la notificación formal a los prestadores:</p>
+<ul>
+<li><strong>Archivo Maestro (Excel/.txt):</strong> Consolidado general de todo el proceso de asignación.</li>
+<li><strong>Reporte de Inconsistencias:</strong> Listado de usuarios para actualización en bases de datos.</li>
+<li><strong>Paquete por IPS:</strong>
+<ul>
+<li>Un archivo <strong>Excel</strong> por cada IPS con sus afiliados asignados.</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-requerimientos-de-automatización">4. Requerimientos de Automatización</h2>
+<ul>
+<li><strong>Tecnología:</strong> Python (Pandas/Polars) para el manejo de grandes volúmenes de datos de los maestros ADRES/SIE.</li>
+<li><strong>Normalización:</strong> Funciones de pivotado para la columna de servicios.</li>
+<li><strong>Exportación:</strong> Script automatizado para la generación de carpetas y archivos individuales por NIT de IPS.</li>
+</ul>
+
+            
+            
+        </body>
+        </html>
