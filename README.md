@@ -1,92 +1,99 @@
 # Capresoca Data Automation
 
-## 1. Descripción General
+Proyecto de automatización de procesos de datos para el área de Aseguramiento de
+Capresoca EPS. El repositorio reúne notebooks operativos, módulos reutilizables
+en Python y documentación técnica de los principales flujos.
 
-Este repositorio está destinado a la construcción de una aplicación para el **área de Aseguramiento de Capresoca EPS**. Su finalidad es automatizar tareas críticas del negocio, algunas de forma periódica y programada, y otras bajo demanda del usuario. El objetivo final es consolidar los prototipos actuales en una aplicación de escritorio robusta y ejecutable.
+## Estado del proyecto
 
-El público objetivo de este proyecto incluye ingenieros de datos, auditores y futuros colaboradores técnicos que necesiten comprender, utilizar o extender las funcionalidades existentes.
+El proyecto se encuentra en desarrollo activo. Actualmente, la mayoría de los
+procesos se ejecutan desde Jupyter Notebooks y se migran progresivamente a
+módulos reutilizables dentro de `src/`.
 
----
+## Contenido
 
-## 2. Estado del Proyecto
+- [Índice de notebooks](notebooks/README.md): catálogo de los 76 notebooks del
+  proyecto.
+- [Arquitectura](docs/arquitectura.md): descripción general de componentes y
+  decisiones técnicas.
+- [Casos de uso](docs/casos_uso.md): procesos funcionales contemplados.
+- [Funciones](docs/funciones.md): referencia de funcionalidades.
+- [Convenciones](docs/convenciones.md): lineamientos para desarrollar y
+  documentar.
+- [Roadmap](docs/roadmap.md): evolución prevista del proyecto.
 
-El proyecto se encuentra en una **fase de desarrollo activo**. Los componentes actuales están siendo migrados de notebooks exploratorios a módulos de código reutilizables.
+## Estructura del repositorio
 
-- **Módulos Principales (`/src`)**:
-  - `file_loader.py`: **(Estable)** Componente para la carga estandarizada de diversos tipos de archivos (CSV, TXT, Excel).
-  - `data_cleaning.py`: **(Estable)** Funciones para la limpieza, validación y transformación de datos según las reglas de negocio.
-  - `main.py`: **(Experimental)** Punto de entrada para futuras ejecuciones automatizadas.
+```text
+capresoca-data-automation/
+├── data/                  # Archivos de entrada locales
+├── docs/                  # Documentación funcional y técnica
+├── notebooks/
+│   ├── Aseguramiento/     # Procesos del área de Aseguramiento
+│   ├── Generales/         # Utilidades transversales
+│   └── README.md          # Índice de notebooks
+├── out/                   # Resultados generados por los procesos
+├── src/
+│   ├── data_cleaning.py   # Limpieza y reglas de transformación
+│   ├── file_loader.py     # Carga estandarizada de archivos
+│   └── main.py            # Punto de entrada experimental
+├── tests/                 # Pruebas automatizadas
+├── config.py              # Configuración compartida
+└── requirements.txt       # Dependencias del entorno
+```
 
-- **Notebooks (`/notebooks`)**:
-  - **(Prototipos funcionales)** Sirven como borradores y campo de pruebas para desarrollar y validar la lógica de negocio. Se dividen en:
-    - `Aseguramiento`: Flujos de trabajo complejos (cruces, indicadores, reportes).
-    - `Generales`: Utilidades para tareas auxiliares (manejo de PDFs, correos).
+## Requisitos
 
----
+- Python 3.8 o superior.
+- JupyterLab o la extensión de Jupyter para Visual Studio Code.
+- Dependencias definidas en `requirements.txt`.
 
-## 3. Requisitos del Entorno
-
-- **Python**: `3.8` o superior.
-- **Librerías Clave**: `pandas`, `numpy`, `openpyxl`, `sqlalchemy`.
-- Para una lista completa de dependencias, consulta el archivo `requirements.txt`.
-
-Para configurar el entorno, sigue estos pasos:
+## Instalación
 
 ```powershell
-# 1. Clona el repositorio
 git clone https://github.com/yesid95/capresoca-data-automation.git
 cd capresoca-data-automation
 
-# 2. Crea y activa un entorno virtual
 python -m venv venv
-.\venv\Scripts\Activate
+.\venv\Scripts\Activate.ps1
 
-# 3. Instala las dependencias
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
+## Uso
 
-## 4. Guía de Uso Básico
+1. Activa el entorno virtual.
+2. Abre el proyecto en VS Code o inicia JupyterLab:
 
-Actualmente, la funcionalidad del proyecto se ejecuta a través de los Jupyter Notebooks. Estos actúan como un **entorno de desarrollo controlado** que permite construir, validar y refinar la lógica de negocio antes de su integración final. Permiten entender los resultados a largo plazo y ajustar los procesos de forma iterativa.
+   ```powershell
+   jupyter lab
+   ```
 
-- **Ejemplos de procesos complejos**: Reportes para ADRES según la normativa vigente (Resolución 762 de 2023).
-- **Ejemplos de manejo de históricos**: El notebook `Unificar_Archivos.ipynb` consolida grandes volúmenes de datos en datasets únicos, facilitando análisis futuros o la alimentación de dashboards.
+3. Consulta el [índice de notebooks](notebooks/README.md) y abre el proceso que
+   necesites.
+4. Verifica las rutas y los parámetros de entrada antes de ejecutar las celdas.
+5. Revisa los resultados generados en `out/` o en la ruta configurada por el
+   notebook.
 
-1.  **Inicia Jupyter Lab o VS Code** en el directorio raíz del proyecto.
-2.  **Navega a la carpeta `/notebooks`** y abre el notebook correspondiente a la tarea que deseas realizar.
-3.  **Ejemplo**: Para ejecutar el proceso de validación de archivos del Sistema de Información de Entidades (SIE), abre y ejecuta las celdas de `notebooks/Aseguramiento/Validar SIE.ipynb`.
+También existe un ejemplo de uso de la configuración compartida en
+[`notebooks/ejemplo_uso_config.ipynb`](notebooks/ejemplo_uso_config.ipynb).
 
-**Nota**: Asegúrate de configurar las rutas de entrada y salida de archivos dentro de cada notebook según tu entorno local.
+> **Importante:** los notebooks pueden procesar información sensible. No
+> confirmes cambios que incluyan datos personales, credenciales, rutas locales,
+> salidas de ejecución o archivos de entrada confidenciales.
 
----
+## Desarrollo
 
-## 5. Futuras Funcionalidades
+- Ubica la lógica reutilizable en `src/` y evita duplicarla entre notebooks.
+- Sigue PEP 8 y el límite de 88 caracteres configurado para Black.
+- Agrega pruebas en `tests/` cuando migres o incorpores reglas de negocio.
+- Documenta los nuevos procesos en `docs/`.
+- Añade cada notebook nuevo al [índice](notebooks/README.md).
 
-La visión a largo plazo es consolidar la lógica de negocio en una aplicación de escritorio para Windows que permita:
+## Contacto
 
-- **Tareas Programadas**: Ejecutar procesos de validación y reportería de forma automática (diaria, semanal, mensual).
-- **Automatización por Demanda**: Permitir a los usuarios iniciar flujos de trabajo específicos a través de una interfaz gráfica sencilla.
-- **Expansión de Módulos**: Fortalecer la biblioteca `src` con más componentes reutilizables y pruebas unitarias.
+- Responsable: Osmar Yesid Rincón
+- Correo: rincon3259@gmail.com
 
----
-
-## 6. Contribuciones
-
-Las contribuciones son bienvenidas. Para proponer mejoras, sigue estos lineamientos:
-
-- **Estructura Modular**: Si desarrollas una nueva funcionalidad reutilizable, añádela como una función o clase en un módulo dentro de `/src`.
-- **Estilo de Código**: Sigue las convenciones de `PEP 8` para mantener la consistencia y legibilidad del código.
-- **Flujo de Trabajo**: Abre un *issue* para discutir el cambio propuesto y luego envía un *pull request* para su revisión.
-
----
-
-## 7. Contacto y Licencia
-
-- **Responsable**: Osmar Yesid Rincón
-- **Correo**: rincon3259@gmail.com
-
-Este proyecto está bajo la **Licencia MIT**. Consulta el archivo `LICENSE` para más detalles.
-
-> *Última actualización: 19 de julio de 2025*
+> Última actualización: 23 de junio de 2026.
